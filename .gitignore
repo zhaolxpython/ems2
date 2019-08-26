@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/day1.iml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/terminal.xml
+.idea/workspace.xml
+ems/.gitignore
+.idea/
+ems2/
+manage.py
+ems2/settings.py
