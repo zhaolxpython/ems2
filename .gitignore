@@ -6,8 +6,6 @@
 .idea/modules.xml
 .idea/terminal.xml
 .idea/workspace.xml
-ems/.gitignore
 .idea/
-ems2/
 manage.py
 ems2/settings.py
