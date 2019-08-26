@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>update Emp</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css"
+			href="/static/css/style.css" />
+	</head>
+
+	<body>
+    {% extends 'base.html' %}
+    {% block content %}
+		<div id="wrap">
+			<div id="top_content">
+				<div id="content">
+					<p id="whereami">
+					</p>
+					<h1>
+						update Emp info:
+					</h1>
+					<form action="{% url 'employee: updatelogic' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+						<table cellpadding="0" cellspacing="0" border="0"
+							class="form_table">
+							<tr>
+								<td valign="middle" align="right">
+									id:
+								</td>
+								<td valign="middle" align="left">
+									{{ user.id }}
+                                    <input type="hidden" value="{{ user.id }}" name="id1">
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									name:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" name="name" value="{{ user.name }}"/>
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									salary:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" name="salary" value="{{ user.salary }}"/>
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="right">
+									age:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" name="age" value="{{ user.age }}"/>
+								</td>
+							</tr>
+                            <tr>
+								<td valign="middle" align="right">
+									upload your photo:
+								</td>
+								<td valign="middle" align="left">
+                                    <img src="/static/{{ user.headpic }}" height="30px">
+									<input type="file" class="inputgri" name="file" />
+								</td>
+							</tr>
+						</table>
+						<p>
+							<input type="submit" class="button" value="Confirm" />
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+    </body>
+</html>

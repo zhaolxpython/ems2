@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>update Emp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script>
+        $(document).ready(function () {
+             $.ajax({
+                type: 'post',
+                url: "/employee/updatelogic/",
+                headers: { 'X-CSRFtoken': $.cookie('csrftoken')},
+                contentType:false,
+                processData: false,
+                success:function (msg) {
+                    if (msg === '0'){
+                        location.href = '/static/login.html'
+                    }else{
+                        user = msg['user'][0];
+                        $('#id').html(user['id']);
+                        $('#name').attr('value', user['name']);
+                        $('#salary').attr('value', user['salary']);
+                        $('#age').attr('value', user['age']);
+                        $('#headpic').attr('src', "/static/media/" + user['headpic']);
+                    }
+                }
+            })
+        });
+        function update() {
+            var data = new FormData($("#form4")[0]);
+            $.ajax({
+                type: 'post',
+                url: "/employee/update/",
+                headers: { 'X-CSRFtoken': $.cookie('csrftoken')},
+                data: data,
+                contentType:false,
+                processData: false,
+                success: function (msg) {
+                    if (msg === '1'){
+                        location.href = '/static/emplist.html'
+                    }else{
+                        alert('更新失败！')
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="header">
+            <div id="rightheader">
+                <p id="date1">
+                    <script type="text/javascript">
+                        var date1 = new Date();
+                        date1 = date1.toLocaleString();
+                        document.write(date1);
+                    </script>
+                    <br/>
+                </p>
+            </div>
+            <div id="topheader">
+                <h1 id="title">
+                    <a href="#">main</a>
+                </h1>
+            </div>
+            <div id="navigation"></div>
+        </div>
+    </div>
+    <div id="wrap">
+        <div id="top_content">
+            <div id="content">
+                <p id="whereami">
+					</p>
+                <h1>
+						update Emp info:
+					</h1>
+                <form action="/employee/updatelogic/" method="post" enctype="multipart/form-data" id="form4">
+                    <table cellpadding="0" cellspacing="0" border="0"
+                        class="form_table">
+                        <tr>
+                            <td valign="middle" align="right">
+                                id:
+                            </td>
+                            <td valign="middle" align="left" id="id">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="right">
+                                name:
+                            </td>
+                            <td valign="middle" align="left">
+                                <input type="text" class="inputgri" id="name" name="name" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="right">
+                                salary:
+                            </td>
+                            <td valign="middle" align="left">
+                                <input type="text" class="inputgri" name="salary" id="salary" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="right">
+                                age:
+                            </td>
+                            <td valign="middle" align="left">
+                                <input type="text" class="inputgri" name="age" id="age" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="right">
+                                upload your photo:
+                            </td>
+                            <td valign="middle" align="left">
+                                <img src="" height="30px" id="headpic">
+                                <input type="file" class="inputgri" name="file" />
+                            </td>
+                        </tr>
+                    </table>
+                    <p>
+                        <input type="button" class="button" value="Confirm" onclick="update()"/>
+                    </p>
+                </form>
+				</div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="footer_bg">
+        1234567890@126.com
+        </div>
+    </div>
+</div>
+</body>
+</html>

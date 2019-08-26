@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>regist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <style>
+         a{
+            text-decoration: none;
+        }
+    </style>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#capt').attr('src', "/adminapp/getcaptche")
+        });
+        var flag = 0;
+        var flag1 = 0;
+        var flag2 = 0;
+        var flag3 = 0;
+        var flag4 = 0;
+        function myclick() {
+            var url = "/adminapp/getcaptche/?" + new Date().getTime();
+            $('#capt').attr('src',url)
+        }
+        function checkname() {
+            username = $('#username').val();
+            var url = "media/middle.gif";
+            $('#img').attr('src', url);
+            if (username === '' || username === null){
+                $('#img').attr('src', "media/error_3.jpg");
+                flag = 0;
+            }else{
+                $.ajax({
+                    type: 'get',
+                    url:"/adminapp/checkname/",
+                    data:'username='+ username,
+                    success:function (msg) {
+                        if (msg === '1'){
+                            var url = "media/right_3.jpg";
+                            flag = 1;
+                        }else {
+                            var url = "media/error_3.jpg";
+                            flag = 2;
+                        }
+                        $('#img').attr('src', url);
+                    }
+                })
+            }
+        }
+        function checkname1() {
+            var name = $('#name').val();
+            if (name != ''){
+                $('#img2').attr('src', "media/right_3.jpg");
+                flag1 = 1;
+            }else {
+                $('#img2').attr('src', "media/error_3.jpg");
+                flag1 = 0;
+            }
+        }
+        function checkpwd() {
+            pwd = $('#pwd').val();
+            if (pwd === ''|| pwd === null ){
+                $('#img3').attr('src', "media/error_3.jpg");
+                flag2 = 0;
+                alert('密码不能为空！')
+            }else if (pwd.length < 5 || pwd.length > 18) {
+                $('#img3').attr('src', "media/error_3.jpg");
+                flag2 = 0;
+                alert('密码长度建议为5~18位！')
+            }else{
+                $('#img3').attr('src', "media/right_3.jpg");
+                flag2 = 1;
+            }
+        }
+        function checkpwd1() {
+            pwd = $('#pwd').val();
+            pwd1 = $('#pwd1').val();
+            if (pwd === pwd1) {
+                $('#img4').attr('src', "media/right_3.jpg");
+                flag3 = 1;
+            }else{
+                $('#img4').attr('src', "media/error_3.jpg");
+                flag3 = 0;
+                alert('两次密码不一致！')
+            }
+        }
+        function checkcaptcha() {
+            var captcha = $('#captnum').val();
+            var url = "media/middle.gif";
+            $('#img5').attr('src', url);
+            $.ajax({
+                type: 'get',
+                url: "/adminapp/checkcaptcha/",
+                data: "captcha=" + captcha,
+                success: function (msg) {
+                    if (msg === '1'){
+                        url = "media/right_3.jpg";
+                        flag4 = 1;
+                    }else{
+                        url = "media/error_3.jpg";
+                        flag4 = 0;
+                    }
+                    $('#img5').attr('src', url);
+                }
+            })
+        }
+        function regist() {
+            if (flag === 1 && flag1 === 1 && flag2 === 1 && flag3 === 1 && flag4 === 1){
+                $.ajax({
+                    type: 'get',
+                    url: "/adminapp/registlogic/",
+                    data: $('#form1').serialize(),
+                    success: function (msg) {
+                        if (msg === '1'){
+                            location.href = "/static/login.html";
+                        }else{
+                            alert('注册失败！')
+                        }
+                    }
+                })
+            }else if(flag === 0) {
+                alert('用户名不能为空！')
+            }else if(flag === 2) {
+                alert('用户名已存在！')
+            }else if(flag1 === 0) {
+                alert('姓名不能为空！')
+            }else if(flag2 === 0 || flag3 === 0) {
+                alert('密码不能为空！')
+            }else if(flag4 === 0) {
+                alert('验证码有误')
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="top_content">
+            <div id="header">
+                <div id="rightheader">
+                    <p id="date1">
+                        <script type="text/javascript">
+                            var date1 = new Date();
+                            date1 = date1.toLocaleString();
+                            document.write(date1);
+                        </script><br/>
+                    </p>
+                </div>
+                <div id="topheader">
+                    <h1 id="title">
+                        <a href="#">main</a>
+                    </h1>
+                </div>
+                <div id="navigation"></div>
+            </div>
+        </div>
+        <div id="wrap">
+            <div id="top_content">
+                <div id="content">
+                    <p id="whereami"></p>
+                    <h1>
+                        注册
+                    </h1>
+                    <form action="/adminapp/registlogic/" id="form1" method="post">
+                        <table cellpadding="0" cellspacing="0" border="0" class="form_table">
+                            <tr>
+                                <td valign="middle" align="center">
+                                    用户名:
+                                </td>
+                                <td valign="middle" align="left">
+                                    <input type="text" class="inputgri" name="username" onblur="checkname()" id="username"/>
+                                    <img id="img" src="" height="20px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="center">
+                                    真实姓名:
+                                </td>
+                                <td valign="middle" align="left">
+                                    <input type="text" class="inputgri" name="name" onblur="checkname1()" id="name"/>
+                                    <img id="img2" src="" height="20px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="center">
+                                    密码:
+                                </td>
+                                <td valign="middle" align="left">
+                                    <input type="password" class="inputgri" name="password" onblur="checkpwd()" id="pwd"/>
+                                    <img id="img3" src="" height="20px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="center">
+                                    确认密码:
+                                </td>
+                                <td valign="middle" align="left">
+                                    <input type="password" class="inputgri" name="password1" onblur="checkpwd1()" id="pwd1"/>
+                                    <img id="img4" src="" height="20px">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="center">
+                                    性别:
+                                </td>
+                                <td valign="middle" align="left">
+                                    男
+                                    <input type="radio" class="inputgri" name="gender" value="1" checked="checked"/>
+                                    女
+                                    <input type="radio" class="inputgri" name="gender" value="0"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="middle" align="right">
+                                    验证码:
+                                    <img id="capt" src="/adminapp/getcaptche/" height="40px"/>
+                                    <a href="javascript:void(0);" onclick="myclick()">换一张</a>
+                                </td>
+                                <td valign="middle" align="left">
+                                    <input type="text" class="inputgri" name="number" onblur="checkcaptcha()" id="captnum"/>
+                                     <img id="img5" src="" height="20px">
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            <input type="button" class="button" value="Submit &raquo;" onclick="regist()" id="button1"/>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+        <div id="footer_bg">
+        1234567890@126.com
+        </div>
+    </div>
+    </div>
+</body>
+</html>

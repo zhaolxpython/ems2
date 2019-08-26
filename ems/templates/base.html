@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css" />
+{#    <script src=" ../static/js/jquery-3.3.1.min.js"></script>#}
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <style>
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="header">
+            <div id="rightheader">
+                <p id="date1">
+                    <script type="text/javascript">
+                        {#window.date1.innerHTML = new Date();#}
+                        /*
+                        window.setInterval(function(){
+                            var date1 = new Date();
+                            date1 = date1.toLocaleString();
+                            document.write(date1);
+                        }, 1000);
+                        */
+                        var date1 = new Date();
+                        date1 = date1.toLocaleString();
+                        document.write(date1);
+                    </script>
+                    <br/>
+                </p>
+            </div>
+            <div id="topheader">
+                <h1 id="title">
+                    <a href="#">main</a>
+                </h1>
+            </div>
+            <div id="navigation">
+                        </div>
+        </div>
+    </div>
+    {% block content %}
+        <span>子模板的内容</span>
+    {% endblock %}
+    <div id="footer">
+        <div id="footer_bg">
+        1234567890@126.com
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <style>
+         a{
+            text-decoration: none;
+        }
+    </style>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#capt').attr('src', "/adminapp/getcaptche")
+        });
+        function myclick() {
+            var url = "/adminapp/getcaptche/?" + new Date().getTime();
+            $('#capt').attr('src', url)
+        }
+        var flag1 = 0;
+        var flag2 = 0;
+        var flag3 = 0;
+        function checkname() {
+            var username = $('#username').val();
+            if (username === '' || username === null){
+                $('#img2').attr('src', "media/error_3.jpg");
+                flag1 =0;
+            }else{
+                $('#img2').attr('src', "media/right_3.jpg");
+                flag1 = 1;
+            }
+        }
+        function checkpwd() {
+            var pwd = $('#pwd').val();
+            if (pwd === '' || pwd === null){
+                $('#img3').attr('src', "media/error_3.jpg");
+                flag2 =0;
+            }else{
+                $('#img3').attr('src', "media/right_3.jpg");
+                flag2 = 1;
+            }
+        }
+        function checkcaptcha1() {
+            var captnum = $('#captnum').val();
+            var url = "media/middle.gif";
+            $('#img1').attr('src', url);
+            $.ajax({
+                type: 'get',
+                url: "/adminapp/checkcaptcha1/",
+                data:"captcha=" + captnum,
+                success: function (msg) {
+                    if (msg === '1'){
+                        url = "media/right_3.jpg";
+                        flag3 = 1;
+                    }else{
+                        url = "media/error_3.jpg";
+                        flag3 = 0;
+                    }
+                    $('#img1').attr('src', url);
+                }
+            })
+        }
+        function login() {
+            if (flag1 === 1 && flag2 === 1 && flag3 === 1){
+               $.ajax({
+                   type: 'get',
+                   url: "/adminapp/loginlogic/",
+                   data: $('#form2').serialize(),
+                   success: function (msg) {
+                       if (msg === '1'){
+                           location.href = "/static/emplist.html";
+                       }else {
+                           alert('登陆失败，用户名或密码错误！')
+                       }
+                   }
+               })
+            }else if (flag1 === 0){
+                alert('用户名不能为空！')
+            }else if(flag2 === 0){
+                alert('密码不能为空！')
+            }else if(flag3 === 0){
+                alert('验证码有误！')
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="top_content">
+            <div id="header">
+                <div id="rightheader">
+                    <p id="date1">
+                        <script type="text/javascript">
+                            var date1 = new Date();
+                            date1 = date1.toLocaleString();
+                            document.write(date1);
+                        </script>
+                        <br/>
+                    </p>
+                </div>
+                <div id="topheader">
+                    <h1 id="title">
+                        <a href="#">main</a>
+                    </h1>
+                </div>
+                <div id="navigation"></div>
+            </div>
+        </div>
+       	<div id="wrap">
+			<div id="top_content">
+				<div id="content">
+					<p id="whereami"></p>
+					<h1>
+						login
+					</h1>
+					<form action="/adminapp/loginlogic/" method="post" id="form2">
+
+                        <table cellpadding="0" cellspacing="0" border="0" class="form_table">
+							<tr>
+								<td valign="middle" align="center">
+									username:
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" name="username" id="username" onblur="checkname()"/>
+                                    <img src="" height="20px" id="img2">
+								</td>
+							</tr>
+							<tr>
+								<td valign="middle" align="center">
+									password:
+								</td>
+								<td valign="middle" align="left">
+									<input type="password" class="inputgri" name="password" id="pwd" onblur="checkpwd()"/>
+                                    <img src="" height="20px" id="img3">
+								</td>
+							</tr>
+                            <tr>
+                                <td valign="middle" align="right">
+									验证码:
+									<img id="capt" src="" height="40px"/>
+									<a href="javascript:void(0);" onclick="myclick()">换一张</a>
+								</td>
+								<td valign="middle" align="left">
+									<input type="text" class="inputgri" name="number" onblur="checkcaptcha1()" id="captnum"/>
+                                    <img src="" height="20px" id="img1">
+								</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input type="checkbox" name="remember" value="1">Remember the username and password
+                                </td>
+                            </tr>
+						</table>
+						<p>
+							<input type="button" class="button" value="Submit &raquo;" onclick="login()"/>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+        <div id="footer">
+            <div id="footer_bg">
+            1234567890@126.com
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% extends 'base.html' %}
+<html>
+	<head>
+		<title>emplist</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    </head>
+	<body>
+
+        {% block content %}
+            <script src="/static/js/jquery-3.3.1.min.js"></script>
+            <script type="text/javascript">
+            function confirm1() {
+                if (confirm('确定要删除该员工吗？')){
+                    return true
+                }else{
+                    return false
+                }
+            }
+
+            </script>
+{#            <script src="{% static 'js/jquery-3.3.1.min.js'%}"></script>#}
+{#            <script>#}
+{#                function query1() {#}
+{##}
+{#                }#}
+{#            </script>#}
+            <div id="wrap">
+                <div id="top_content">
+                    <div id="content">
+                        <p id="whereami">
+                        </p>
+                        <h1>
+                            Welcome!
+                        </h1>
+                    <!--
+                        <h2>
+                            关键字：<input type="text" name="keyword" id="keyword" onkeyup="query2()">
+                            <input type="submit" value="检索">
+                        </h2>
+                    -->
+                        <table class="table" border="1">
+                            <tr class="table_header">
+                                <td align="center">ID</td>
+                                <td align="center">Headpic</td>
+                                <td align="center">Name</td>
+                                <td align="center">Salary</td>
+                                <td align="center">Age</td>
+                                <td align="center">Operation</td>
+                            </tr>
+                            {% for user in page.object_list %}
+                                <tr>
+                                    <td align="center">{{ user.id }}</td>
+                                    <td align="center"><img src="/static/{{ user.headpic }}" height="30px"></td>
+                                    <td align="center">{{ user.name }}</td>
+                                    <td align="center">{{ user.salary }}</td>
+                                    <td align="center">{{ user.age }}</td>
+                                    <td align="center">
+                                        <a href="{% url 'employee:updateemp' %}?id={{ user.id }}&&pagenum1={{ page.number }}" name="updateemp">update emp</a>&nbsp;
+{#                                        <a href="javascript:void (0);" name="delemp" onclick="confirm1()">delete emp</a>#}
+                                        <a href="{% url 'employee:delemp' %}?id={{ user.id }}&&pagenum2={{ page.number }}" name="delemp" onclick="return confirm1()" id="adel">delete emp</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <div style="text-align: center">
+                            {% if page.has_previous %}
+                                <a href="{% url 'employee:employee' %}?num={{ page.previous_page_number }}">上一页</a>
+                            {% endif %}
+                            {% for page_num in page.paginator.page_range %}
+                                <a href="{% url 'employee:employee' %}?num={{ page_num }}" >
+                                {% if page.number == page_num %}
+                                    <span class="a" style="font-size: 15px;width:20px;height: 20px;border:1px solid blue;
+                                    cursor:pointer;display: inline-block;text-align: center;line-height: 20px;">
+                                        {{ page_num }}
+                                    </span>
+                                {% else %}
+                                    <span class="b" style="border:0;width:20px;height: 20px;cursor:pointer;display: inline-block;
+                                    text-align: center;line-height: 20px;">
+                                        {{ page_num }}
+                                    </span>
+                                {% endif %}
+                                </a>
+                            {% endfor %}
+                            {% if page.has_next %}
+                                <a href="{% url 'employee:employee' %}?num={{ page.next_page_number }}">下一页</a>
+                            {% endif %}
+                        </div>
+                        <p>
+                            <input type="button" class="button" value="Add Employee" onclick=" location='{% url "employee:addemp" %}'"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+	</body>
+</html>

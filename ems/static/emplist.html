@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>emplist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var str = "<tr class=\"table_header\">\n" +
+                "                            <td align=\"center\">ID</td>\n" +
+                "                            <td align=\"center\">Headpic</td>\n" +
+                "                            <td align=\"center\">Name</td>\n" +
+                "                            <td align=\"center\">Age</td>\n" +
+                "                            <td align=\"center\">Salary</td>\n" +
+                "                            <td align=\"center\">Operation</td>\n" +
+                "                        </tr>";
+            $.ajax({
+                type: 'post',
+                url: "/employee/employee/",
+                headers: { 'X-CSRFtoken': $.cookie('csrftoken')},
+                contentType:false,
+                processData: false,
+                success: function (msg) {
+                    if (msg === '0'){
+                        location.href = '/static/login.html'
+                    }else{
+                        users = msg['users'];
+                        for(var i = 0; i < users.length; i++){
+                            var user = users[i];
+                            str += '<tr>';
+                            str += '<td align="center">' + user['id'] + '</td>';
+                            str += '<td align="center">' + '<img src="/static/media/' + user['headpic'] + '" height="30px">' + '</td>';
+                            str += '<td align="center">' + user['name'] + '</td>';
+                            str += '<td align="center">' + user['age'] + '</td>';
+                            str += '<td align="center">' + user['salary'] + '</td>';
+                            str += '<td align="center">\n'+
+                                        '<a href="javascript:void(0);" name="updateemp" id="update" onclick="update1('+ user['id']+')" >update emp</a>&nbsp;'+
+                                        '<a href="javascript:void(0);" name="delemp" onclick="delete1('+ user['id'] +')" id="del">delete emp</a>'+
+                                    '</td>';
+                            str += '</tr>';
+                        }
+                        $('#table1').html(str)
+                    }
+                }
+            });
+        });
+        function update1(id) {
+            var id = id;
+            $.ajax({
+                type: 'get',
+                url: "/employee/updateemp/",
+                data: "id=" + id,
+                success: function (msg) {
+                    if(msg === '1'){
+                        location.href = "/static/updateEmp.html"
+                    }
+                }
+            })
+        }
+        function delete1(id) {
+            var id = id;
+            if (confirm('确定要删除该员工吗？')){
+                $.ajax({
+                    type:'get',
+                    url: "/employee/delemp/",
+                    data: 'id='+ id,
+                    success: function (msg) {
+                        if(msg==='1'){
+                            location.href = "/static/emplist.html"
+                        }
+                    }
+                });
+                return true
+            }else{
+                return false
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="top_content">
+            <div id="header">
+                <div id="rightheader">
+                    <p id="date1">
+                        <script type="text/javascript">
+                            var date1 = new Date();
+                            date1 = date1.toLocaleString();
+                            document.write(date1);
+                        </script>
+                        <br/>
+                    </p>
+                </div>
+                <div id="topheader">
+                    <h1 id="title">
+                        <a href="#">main</a>
+                    </h1>
+                </div>
+                <div id="navigation"></div>
+            </div>
+        </div>
+        <div id="wrap">
+            <div id="top_content">
+                <div id="content">
+                    <p id="whereami">
+                    </p>
+                    <h1>
+                        Welcome!
+                    </h1>
+                    <table class="table" border="1" id="table1"></table>
+                    <p>
+                        <input type="button" class="button" value="Add Employee" onclick="location.href='/static/addEmp.html'"/>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="footer_bg">1234567890@126.com</div>
+        </div>
+    </div>
+</body>
+</html>
