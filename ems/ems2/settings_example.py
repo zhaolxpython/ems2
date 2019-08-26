@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bh$aq7v%kce8i$vndtfcf9ip07k9^s+%c9*7sz26gab_=nt(5f'
+SECRET_KEY = '************************'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -80,9 +80,9 @@ WSGI_APPLICATION = 'ems2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'modeldb2',
+        'NAME': 'example',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': '******',
         'HOST': 'localhost',
         'PORT': 3306,
     }
